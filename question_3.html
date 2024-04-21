@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Joy's Café Search</title>
+    <style>
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+      th {
+        background-color: #f2f2f2;
+      }
+      input[type="text"] {
+        padding: 8px;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" id="searchBox" placeholder="Search cafes..." />
+    <table id="cafeTable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Street</th>
+          <th>Locality</th>
+          <th>Postal Code</th>
+        </tr>
+      </thead>
+      <tbody id="cafeList"></tbody>
+    </table>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const searchBox = document.getElementById("searchBox");
+        const cafeList = document.getElementById("cafeList");
+
+        fetchCafes();
+        fetchPlaces();
+
+        searchBox.addEventListener("input", function () {
+          const searchTerm = searchBox.value.trim().toLowerCase();
+          filterCafes(searchTerm);
+        });
+
+        function fetchCafes() {
+          fetch("https://api.example.com/cafes")
+            .then((response) => response.json())
+            .then((data) => {
+              displayCafes(data);
+            })
+            .catch((error) => console.error("Error fetching cafes:", error));
+        }
+
+        function fetchPlaces() {
+          fetch("https://api.example.com/places")
+            .then((response) => response.json())
+            .then((data) => {
+              displayPlaces(data);
+            })
+            .catch((error) => console.error("Error fetching places:", error));
+        }
+
+        function displayCafes(cafes) {
+          cafeList.innerHTML = "";
+          cafes.forEach((cafe) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                        <td>${cafe.name}</td>
+                        <td>${cafe.street_no}</td>
+                        <td>${cafe.locality}</td>
+                        <td>${cafe.postal_code}</td>
+                    `;
+            cafeList.appendChild(tr);
+          });
+        }
+
+        function filterCafes(searchTerm) {
+          const filteredCafes = cafes.filter((cafe) =>
+            cafe.name.toLowerCase().includes(searchTerm)
+          );
+          displayCafes(filteredCafes);
+        }
+
+        function displayPlaces(places) {}
+      });
+    </script>
+  </body>
+</html>
